@@ -10,13 +10,19 @@ const connection = new pg.Pool({
   port: 5432,
   });
   
-router.get('/', function (req, res, next) {
-  res.render('index', {
+  router.get('/', function (req, res, next) {
+    connection.query(
+    `select * from tasks;`,
+    (error, results) => {
+    console.log(error);
+    console.log(results.rows);
+    res.render('index', {
     title: 'ToDo App',
-    todos: results.rows,
-  });
-});
-
+    todos: results.rows, });
+    }
+    );
+    });
+    
 router.post('/', function (req, res, next) {
   connection.connect((err) => {
     if (err) {
